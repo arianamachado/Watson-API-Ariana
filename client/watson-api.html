@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="watson.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Muli:300,400,600,700%7COpen+Sans" rel="stylesheet">    <link rel="stylesheet" href="styles.css">
+    <title>IBM Watson Visual Recognition</title>
+</head>
+<body>
+    <!-- TOP HEADER -->
+    <header>
+        <h1><span>IBM</span> Watson Visual Recognition</h1>
+    </header>
+
+    <!-- INITIAL FORM REQUESTING IMAGE URL -->
+    <div id="opening">
+        <form>
+            <input type="text" placeholder="Paste an image url here..." name="imageFile" id="imgFile">
+            <input type="submit" value="Send" id="submit">
+        </form>
+    </div>
+
+    <!-- TEXT SAYING WATSON THINKING -->
+    <div id="thinking">
+        <h1 id="watsonThink"></h1>
+    </div>
+
+    <!-- RESULTS SHOWING IMAGE AND THE RESULT OF THE IBM WATSON VISUAL RECOGNITION API  -->
+    <div id="results">
+        <div id="imgContainer">
+        </div>
+        <div id="guessContainer">
+            <h1 id="guess"></h1>
+        </div>
+        <button id="reload">Try Another Image</button>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <!-- JQUERY -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- TYPEIT JS -->
+    <script src="/js/typeit-master/dist/typeit.js"></script>
+    <script>
+        $(document).ready(function(){
+            // Run this when form is submited
+            $("form").submit(function(e){
+                // Do not reload the page
+                e.preventDefault();
+                // Grab the url link in the input
+                var imgLink = $('#imgFile').val();
+
+                // First check if the url ends in the following extensions: .jpeg, .jpg, .gif, .png
+                if (imgLink.match(/\.(jpeg|jpg|gif|png)$/) != null) {
+                    
+                    // fade out the initial form and button
+                    $("#opening").fadeOut(2000);
+                    // fade in the text saying "watson thinking"
+                    $("#thinking").delay(1000).fadeIn(2000, function(){
+                        // type in "watson thinking"
+                        new TypeIt('#watsonThink', {
+                            strings: 'Watson is thinking...',
+                            speed: 75,
+                            autoStart: false
+                        });
+                    });
+                    // fade out the watson thinking text
+                    $("#thinking").delay(3000).fadeOut(2000, function(){
+                        // fade in the results of the API after analyzing image
+                        $("#results").fadeIn(2000);
+                        // change the src of the image element to the link provided
+                        $('#imgContainer').append('<img id="image" src="' + imgLink + '">');
+
+                        // send the url of the image to the server
+                        $.ajax({
+                            type: "POST",
+                            url: '/send',
+                            data: $('form').serializeArray(),
+                            dataType: "JSON",
+                            // grab the results of the API
+                            success: function (result) {
+                                // grab the classifier 
+                                var name = result.images[0].classifiers[0].classes[0].class
+                                // grab the score
+                                var score = result.images[0].classifiers[0].classes[0].score
+                                // type in the results of the API
+                                new TypeIt('#guess', {
+                                    strings: [' I am ' + Math.round(score * 100) + '% sure that is a ' + name + '!'],
+                                    speed: 75
+                                });
+                            }
+                        });
+                    });
+                // If the user types in an invalid url, alert them to type in a correct url of an image
+                } else {
+                    alert('You must enter a valid url of an image (a url ending in .jpeg, .jpg, .gif, or .png)');
+                };
+            });
+
+            // When the user clicks "try another image" reload the page
+            $("#reload").click(function(){
+                location.reload(true);
+            })
+        });
+    </script>
+</body>
+</html>

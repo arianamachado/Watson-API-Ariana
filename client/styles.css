@@ -1,0 +1,107 @@
+/******* GENERAL STYLES *******/
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Muli', sans-serif;
+    background-color: black;
+    color: white;
+}
+
+header {
+    text-align: center;
+    font-weight: 200;
+    font-size: 0.5rem;
+    margin: 50px;
+    color: white;
+}
+
+h1 {
+    text-align: center;
+}
+
+h1 span {
+    font-weight: 100;
+}
+
+/******* ID STYLES *******/
+
+#guess, #watsonThink {
+    font-size: 2.5vmax;
+}
+
+#results, #thinking {
+    display: none;
+}
+
+#thinking {
+    margin-top: 18%;
+}
+
+#imgContainer {
+    margin: 90px auto 30px;
+    width: 35vmax;
+}
+
+#image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+#opening {
+    margin-top: 17vmax;
+    display: flex;
+    justify-content: center;
+}
+
+#imgFile {
+    display: block;
+    width: 35vmax;
+    padding: 1.8vmax;
+    color: rgba(255, 255, 255, 0.382);
+    background: none;
+    outline: 0;
+    border: 0;
+    font-size: 1.5vmax;
+    font-family: 'Muli', sans-serif;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.882);
+}
+
+#guessContainer {
+    display: block;
+    overflow: hidden;
+    height: 80px;
+}
+
+#submit, #reload {
+    border: 2px solid #26DD80;
+    background: none;
+    color: #26DD80;
+    display: block;
+    margin: 80px auto;
+    padding: 20px 40px;
+    font-family: 'Muli', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 800;
+    font-size: 16px;
+    -moz-transition: all .3s ease-in;
+    -o-transition: all .3s ease-in;
+    -webkit-transition: all .3s ease-in;
+    transition: all .3s ease-in;
+}
+
+#submit:hover, #reload:hover {
+    background: #26DD80;
+    color: black;
+}
+
+#submit:focus, #reload:focus {
+    outline: none;
+}
+
+#reload {
+    margin-top: 40px;
+}
